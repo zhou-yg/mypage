@@ -1,6 +1,6 @@
+ce = React.createElement
 #搜索组件
 do ->
-  ce = React.createElement
 
   searchTypeSelected = 'selected'
 
@@ -19,7 +19,7 @@ do ->
     }
   }
 
-  defaultEngineType = 'baidu'
+  defaultEngineType = searchEngineObj.baidu.type
 
   SearchBox =  React.createClass {
     getInitialState:->
@@ -47,6 +47,7 @@ do ->
       window.open url
 
     inputKeyDown:(e)->
+      console.log @refs.searchText
       inputDom = e.target
       @setState
         text:inputDom.value
@@ -61,12 +62,12 @@ do ->
         (ce 'input',{
           onKeyDown:@inputKeyDown
           className :'search-input'
+          ref:'searchText'
           placeholder:'正在使用'+searchEngineObj[@state.searchType].name+'搜索'
           type:'text'
         })
-        (ce 'div',{ className:'search-btn',onClick:@clickSearchBtn },'Go')
+        (ce 'input',{ type:'submit',value:'Go',className:'search-btn',onClick:@clickSearchBtn })
         (ce 'div',{ className:'cf '} )
-
   }
 
   React.render(
@@ -74,45 +75,75 @@ do ->
     document.getElementById('searchBox')
   )
 
-###
+#网页站点组件
 do ->
-  $searchType = $ '.search-type'
-  $searchBtn = $ '.search-btn'
-  $searchInput = $ '.search-input'
+  #server return json
+  webListArr = [{
+    header:'社区'
+    urls:[{
+      url:'http://www.zhihu.com/'
+      name:'知乎'
+    },{
+      url:'http://www.acfun.tv/v/list63/index.htm'
+      name:'AC文章'
+    },{
+      url:'http://tieba.baidu.com/'
+      name:'贴吧'
+    },{
+      url:'http://weibo.com/'
+      name:'新浪微博'
+    }]
+  },{
+    header:'直播'
+    urls:[{
+      url:'http://www.douyutv.com/'
+      name:'斗鱼'
+    },{
+      url:'http://zhanqi.tv/'
+      name:'战棋'
+    },{
+      url:'http://www.huomaotv.com/'
+      name:'火猫'
+    },{
+      url:'http://www.kktv5.com/'
+      name:'KK游戏'
+    }]
+  },{
+    header:'视频'
+    urls:[{
+      url:'http://www.acfun.tv/'
+      name:'AcFun'
+    },{
+      url:'http://www.bilibili.com/'
+      name:'B站'
+    },{
+      url:'http://www.youku.com/i/'
+      name:'优酷'
+    },{
+      url:'http://www.tudou.com/'
+      name:'土豆'
+    }]
+  }]
 
-  searchTypeDefault = 'baidu'
-  searchTypeMap =
-    baidu:
-      desc:'正在使用百度搜索'
-      queryTo:(_searchText)->
-        return 'http://www.baidu.com/s?wd='+_searchText
-    google:
-      desc:'正在使用谷歌搜索'
-      queryTo:(_searchText)->
-        return 'http://74.125.20.146/#newwindow=1&q='+_searchText
+  WebListOne = React.createClass {
+    render:->
+      itemOne = @props.itemOne
+      ce 'li',{ className:'web-list'},
+        (ce 'div',{ className:'list-type-header' },itemOne.header)
+        (ce 'ul',{ className:'list-contents' },itemOne.urls.map (urlOne,i)->
+          (ce 'li',{ className:'list-contents-one',key:'url'+i},
+            (ce 'a',{ href:urlOne.url,target:'_blank' },urlOne.name)
+          )
+        )
+  }
 
-  buildSearchUrl = searchTypeMap[searchTypeDefault].queryTo
+  WebUl = React.createClass {
+    render:->
+      ce 'ul',null,webListArr.map (itemOne,i,all)->
+        ce WebListOne,{itemOne:itemOne,key:'wl'+i}
+  }
 
-  $searchType
-    .children()
-    .click (e)->
-      $this=  $ this
-      type = $this.attr 'searchType'
-      typeObj = searchTypeMap[type] || searchTypeMap[searchTypeDefault]
-
-      buildSearchUrl = typeObj.queryTo
-
-      $this.addClass 'selected'
-            .siblings 'li'
-              .removeClass 'selected'
-
-      $searchInput.attr 'placeholder',typeObj.desc
-
-  $searchBtn
-    .click ->
-      text = $searchInput.val()
-
-      if text
-        url = buildSearchUrl text
-        window.open url,'_blank'
-###
+  React.render(
+    ce WebUl
+    document.getElementById('web-ul')
+  )

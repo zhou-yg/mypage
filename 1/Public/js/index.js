@@ -1,7 +1,10 @@
 (function() {
+  var ce;
+
+  ce = React.createElement;
+
   (function() {
-    var SearchBox, ce, defaultEngineType, searchEngineObj, searchTypeSelected;
-    ce = React.createElement;
+    var SearchBox, defaultEngineType, searchEngineObj, searchTypeSelected;
     searchTypeSelected = 'selected';
     searchEngineObj = {
       baidu: {
@@ -17,7 +20,7 @@
         urlPre: 'http://74.125.20.146/#newwindow=1&q='
       }
     };
-    defaultEngineType = 'baidu';
+    defaultEngineType = searchEngineObj.baidu.type;
     SearchBox = React.createClass({
       getInitialState: function() {
         return {
@@ -46,6 +49,7 @@
       },
       inputKeyDown: function(e) {
         var inputDom;
+        console.log(this.refs.searchText);
         inputDom = e.target;
         return this.setState({
           text: inputDom.value
@@ -69,12 +73,15 @@
         })), ce('input', {
           onKeyDown: this.inputKeyDown,
           className: 'search-input',
+          ref: 'searchText',
           placeholder: '正在使用' + searchEngineObj[this.state.searchType].name + '搜索',
           type: 'text'
-        }), ce('div', {
+        }), ce('input', {
+          type: 'submit',
+          value: 'Go',
           className: 'search-btn',
           onClick: this.clickSearchBtn
-        }, 'Go'), ce('div', {
+        }), ce('div', {
           className: 'cf '
         }));
       }
@@ -82,48 +89,94 @@
     return React.render(ce(SearchBox), document.getElementById('searchBox'));
   })();
 
-
-  /*
-  do ->
-    $searchType = $ '.search-type'
-    $searchBtn = $ '.search-btn'
-    $searchInput = $ '.search-input'
-  
-    searchTypeDefault = 'baidu'
-    searchTypeMap =
-      baidu:
-        desc:'正在使用百度搜索'
-        queryTo:(_searchText)->
-          return 'http://www.baidu.com/s?wd='+_searchText
-      google:
-        desc:'正在使用谷歌搜索'
-        queryTo:(_searchText)->
-          return 'http://74.125.20.146/#newwindow=1&q='+_searchText
-  
-    buildSearchUrl = searchTypeMap[searchTypeDefault].queryTo
-  
-    $searchType
-      .children()
-      .click (e)->
-        $this=  $ this
-        type = $this.attr 'searchType'
-        typeObj = searchTypeMap[type] || searchTypeMap[searchTypeDefault]
-  
-        buildSearchUrl = typeObj.queryTo
-  
-        $this.addClass 'selected'
-              .siblings 'li'
-                .removeClass 'selected'
-  
-        $searchInput.attr 'placeholder',typeObj.desc
-  
-    $searchBtn
-      .click ->
-        text = $searchInput.val()
-  
-        if text
-          url = buildSearchUrl text
-          window.open url,'_blank'
-   */
+  (function() {
+    var WebListOne, WebUl, webListArr;
+    webListArr = [
+      {
+        header: '社区',
+        urls: [
+          {
+            url: 'http://www.zhihu.com/',
+            name: '知乎'
+          }, {
+            url: 'http://www.acfun.tv/v/list63/index.htm',
+            name: 'AC文章'
+          }, {
+            url: 'http://tieba.baidu.com/',
+            name: '贴吧'
+          }, {
+            url: 'http://weibo.com/',
+            name: '新浪微博'
+          }
+        ]
+      }, {
+        header: '直播',
+        urls: [
+          {
+            url: 'http://www.douyutv.com/',
+            name: '斗鱼'
+          }, {
+            url: 'http://zhanqi.tv/',
+            name: '战棋'
+          }, {
+            url: 'http://www.huomaotv.com/',
+            name: '火猫'
+          }, {
+            url: 'http://www.kktv5.com/',
+            name: 'KK游戏'
+          }
+        ]
+      }, {
+        header: '视频',
+        urls: [
+          {
+            url: 'http://www.acfun.tv/',
+            name: 'AcFun'
+          }, {
+            url: 'http://www.bilibili.com/',
+            name: 'B站'
+          }, {
+            url: 'http://www.youku.com/i/',
+            name: '优酷'
+          }, {
+            url: 'http://www.tudou.com/',
+            name: '土豆'
+          }
+        ]
+      }
+    ];
+    WebListOne = React.createClass({
+      render: function() {
+        var itemOne;
+        itemOne = this.props.itemOne;
+        return ce('li', {
+          className: 'web-list'
+        }, ce('div', {
+          className: 'list-type-header'
+        }, itemOne.header), ce('ul', {
+          className: 'list-contents'
+        }, itemOne.urls.map(function(urlOne, i) {
+          return ce('li', {
+            className: 'list-contents-one',
+            key: 'url' + i
+          }, ce('a', {
+            href: urlOne.url,
+            target: '_blank'
+          }, urlOne.name));
+        })));
+      }
+    });
+    WebUl = React.createClass({
+      render: function() {
+        return ce('ul', null, webListArr.map(function(itemOne, i, all) {
+          return ce(WebListOne, {
+            itemOne: itemOne,
+            key: 'wl' + i
+          });
+        }));
+      }
+    });
+    return React.render(ce(WebUl), document.getElementById('web-ul'));
+  })();
 
 }).call(this);
