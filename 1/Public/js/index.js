@@ -25,7 +25,7 @@
       getInitialState: function() {
         return {
           searchType: defaultEngineType,
-          text: 'text'
+          text: ''
         };
       },
       changeEngine: function(e) {
@@ -44,12 +44,13 @@
       clickSearchBtn: function() {
         var url, urlPre;
         urlPre = searchEngineObj[this.state.searchType].urlPre;
-        url = urlPre + this.state.text;
-        return window.open(url);
+        if (this.state.text) {
+          url = urlPre + this.state.text;
+          return window.open(url);
+        }
       },
       inputKeyDown: function(e) {
         var inputDom;
-        console.log(this.refs.searchText);
         inputDom = e.target;
         return this.setState({
           text: inputDom.value
@@ -90,7 +91,7 @@
   })();
 
   (function() {
-    var WebListOne, WebUl, webListArr;
+    var WebListOne, WebUl, addNameHolder, addTypeName, addUrlBtnName, addUrlHolder, btnRotateAni, defaultTypeName, editHeaderCancelName, editHeaderSubmitName, showAddUrlDur, webListArr, webUlDom;
     webListArr = [
       {
         header: '社区',
@@ -145,7 +146,109 @@
         ]
       }
     ];
+    webUlDom = document.getElementById('web-ul');
+    defaultTypeName = '默认';
+    addTypeName = '增加分类';
+    addNameHolder = '名称';
+    addUrlHolder = '链接';
+    addUrlBtnName = '添加';
+    editHeaderCancelName = '取消';
+    editHeaderSubmitName = '确定';
+    showAddUrlDur = 750;
+    btnRotateAni = ' show-addUrl-btn-display';
     WebListOne = React.createClass({
+      getInitialState: function() {
+        var headerName;
+        headerName = this.props.itemOne.header ? this.props.itemOne.header : defaultTypeName;
+        return {
+          headerName: headerName,
+          defaultHeaderName: headerName,
+          isEditHeader: this.props.isEditHeader,
+          editHeaderBoxClass: this.props.isEditHeader ? '' : 'hide',
+          isInputShow: false,
+          btnRotateAniClass: ''
+        };
+      },
+      changeAddUrlState: function() {
+        var btnRotateAniClassV;
+        if (this.state.isInputShow) {
+          btnRotateAniClassV = '';
+        } else {
+          btnRotateAniClassV = btnRotateAni;
+        }
+        return this.setState({
+          isInputShow: !this.state.isInputShow,
+          btnRotateAniClass: btnRotateAniClassV
+        });
+      },
+      editHeaderSubmit: function() {
+        var editHeaderBoxClassV;
+        editHeaderBoxClassV = 'hide';
+        console.log(this.state.headerName);
+        return this.setState({
+          isEditHeader: false,
+          editHeaderBoxClass: editHeaderBoxClassV
+        });
+      },
+      editHeaderCancel: function() {
+        var editHeaderBoxClassV;
+        editHeaderBoxClassV = 'hide';
+        if (this.state.headerName === this.state.defaultHeaderName) {
+          return this.setState({
+            isEditHeader: false,
+            editHeaderBoxClass: editHeaderBoxClassV
+          });
+        } else {
+          return this.setState({
+            isEditHeader: !this.state.isEditHeader,
+            editHeaderBoxClass: editHeaderBoxClassV,
+            headerName: this.state.defaultHeaderName
+          });
+        }
+      },
+      editTypeHeader: function(ev) {
+        var editHeaderBoxClassV;
+        if (this.state.isEditHeader) {
+          editHeaderBoxClassV = 'hide';
+        } else {
+          editHeaderBoxClassV = '';
+        }
+        return this.setState({
+          isEditHeader: !this.state.isEditHeader,
+          editHeaderBoxClass: editHeaderBoxClassV
+        });
+      },
+      headerNameChange: function() {
+        if (this.refs.headerNameInput.getDOMNode().value) {
+          return this.setState({
+            headerName: this.refs.headerNameInput.getDOMNode().value
+          });
+        }
+      },
+      inputBoxShow: function() {
+        this.refs.$inputBox.animate({
+          left: '-15px',
+          opacity: 1
+        }, showAddUrlDur);
+        return this.changeAddUrlState();
+      },
+      inputBoxHide: function() {
+        this.refs.$inputBox.animate({
+          left: '400px',
+          opacity: 0
+        }, showAddUrlDur);
+        return this.changeAddUrlState();
+      },
+      showAddUrlClicked: function() {
+        if (!this.refs.$inputBox) {
+          this.refs.$inputBox = $(this.refs.inputBox.getDOMNode());
+        }
+        if (!this.state.isInputShow && !this.state.isEditHeader) {
+          return this.inputBoxShow();
+        } else {
+          return this.inputBoxHide();
+        }
+      },
       render: function() {
         var itemOne;
         itemOne = this.props.itemOne;
@@ -153,7 +256,39 @@
           className: 'web-list'
         }, ce('div', {
           className: 'list-type-header'
-        }, itemOne.header), ce('ul', {
+        }, ce('span', {
+          className: 'header-name',
+          onClick: this.editTypeHeader
+        }, this.state.headerName), ce('div', {
+          className: 'edit-header-box ' + this.state.editHeaderBoxClass
+        }, ce('input', {
+          className: 'header-name-input',
+          ref: 'headerNameInput',
+          defaultValue: this.state.headerName,
+          onChange: this.headerNameChange
+        }), ce('div', {
+          className: 'header-cancel',
+          onClick: this.editHeaderCancel
+        }, editHeaderCancelName), ce('div', {
+          className: 'header-submit',
+          onClick: this.editHeaderSubmit
+        }, editHeaderSubmitName)), ce('span', {
+          className: 'show-addUrl-btn ' + this.state.btnRotateAniClass,
+          onClick: this.showAddUrlClicked
+        }), ce('div', {
+          className: 'newUrl-input-box',
+          ref: 'inputBox'
+        }, ce('div', {
+          className: 'addUrl-btn'
+        }, addUrlBtnName), ce('input', {
+          className: 'url-name',
+          type: 'text',
+          placeholder: addNameHolder
+        }), ce('input', {
+          className: 'url-href',
+          type: 'url',
+          placeholder: addUrlHolder
+        }))), ce('ul', {
           className: 'list-contents'
         }, itemOne.urls.map(function(urlOne, i) {
           return ce('li', {
@@ -167,16 +302,46 @@
       }
     });
     WebUl = React.createClass({
+      getInitialState: function() {
+        return {
+          webListArr: webListArr
+        };
+      },
+      addType: function() {
+        var curList;
+        curList = this.state.webListArr;
+        curList.push({
+          header: '',
+          urls: []
+        });
+        return this.setState({
+          webListArr: curList
+        });
+      },
       render: function() {
-        return ce('ul', null, webListArr.map(function(itemOne, i, all) {
-          return ce(WebListOne, {
-            itemOne: itemOne,
-            key: 'wl' + i
-          });
+        return ce('ul', null, ce('li', {
+          className: 'add-type',
+          onClick: this.addType
+        }, addTypeName), this.state.webListArr.map(function(itemOne, i, all) {
+          var webListOne;
+          if (itemOne.header) {
+            webListOne = ce(WebListOne, {
+              itemOne: itemOne,
+              isEditHeader: false,
+              key: 'wl' + i
+            });
+          } else {
+            webListOne = ce(WebListOne, {
+              itemOne: itemOne,
+              isEditHeader: true,
+              key: 'wl' + i
+            });
+          }
+          return webListOne;
         }));
       }
     });
-    return React.render(ce(WebUl), document.getElementById('web-ul'));
+    return React.render(ce(WebUl), webUlDom);
   })();
 
 }).call(this);

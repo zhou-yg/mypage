@@ -25,7 +25,7 @@ do ->
     getInitialState:->
       return {
         searchType:defaultEngineType
-        text:'text'
+        text:''
       }
 
     changeEngine:(e)->
@@ -43,11 +43,11 @@ do ->
 
     clickSearchBtn:->
       urlPre = searchEngineObj[@state.searchType].urlPre
-      url = urlPre + @state.text
-      window.open url
+      if @state.text
+        url = urlPre + @state.text
+        window.open url
 
     inputKeyDown:(e)->
-      console.log @refs.searchText
       inputDom = e.target
       @setState
         text:inputDom.value
@@ -125,25 +125,165 @@ do ->
     }]
   }]
 
+  webUlDom = document.getElementById('web-ul')
+
+  defaultTypeName = '默认'
+  addTypeName = '增加分类'
+
+  addNameHolder = '名称'
+  addUrlHolder = '链接'
+  addUrlBtnName = '添加'
+
+  editHeaderCancelName = '取消'
+  editHeaderSubmitName = '确定'
+
+  showAddUrlDur = 750
+  btnRotateAni = ' show-addUrl-btn-display'
+
   WebListOne = React.createClass {
+    getInitialState:->
+      headerName = if @props.itemOne.header then @props.itemOne.header else defaultTypeName
+      {
+        headerName:headerName
+        defaultHeaderName:headerName
+        isEditHeader:@props.isEditHeader
+        editHeaderBoxClass:if @props.isEditHeader then '' else 'hide'
+        isInputShow:false
+        btnRotateAniClass:''
+      }
+    changeAddUrlState:->
+      if @state.isInputShow
+        btnRotateAniClassV = ''
+      else
+        btnRotateAniClassV = btnRotateAni
+
+      @setState {
+        isInputShow:!@state.isInputShow
+        btnRotateAniClass:btnRotateAniClassV
+      }
+    #更新 编辑的分类名
+    editHeaderSubmit:->
+      editHeaderBoxClassV = 'hide'
+
+      console.log @state.headerName
+
+      @setState {
+        isEditHeader:false
+        editHeaderBoxClass:editHeaderBoxClassV
+      }
+    #取消 编辑分类名
+    editHeaderCancel:->
+      editHeaderBoxClassV = 'hide'
+
+      if @state.headerName is @state.defaultHeaderName
+        @setState {
+          isEditHeader:false
+          editHeaderBoxClass:editHeaderBoxClassV
+        }
+      else
+        @setState {
+          isEditHeader:!@state.isEditHeader
+          editHeaderBoxClass:editHeaderBoxClassV
+          headerName:@state.defaultHeaderName
+        }
+    #编辑 分类名
+    editTypeHeader:(ev)->
+      if @state.isEditHeader
+        editHeaderBoxClassV = 'hide'
+      else
+        editHeaderBoxClassV = ''
+
+      @setState {
+        isEditHeader:!@state.isEditHeader
+        editHeaderBoxClass:editHeaderBoxClassV
+      }
+    headerNameChange:->
+      if @refs.headerNameInput.getDOMNode().value
+        @setState
+          headerName:@refs.headerNameInput.getDOMNode().value
+
+    #显示 站点输入
+    inputBoxShow:->
+      #show
+      @refs.$inputBox.animate {
+        left:'-15px'
+        opacity:1
+      },showAddUrlDur
+
+      @changeAddUrlState()
+
+    #隐藏 站点输入
+    inputBoxHide:->
+      #hide
+      @refs.$inputBox.animate {
+        left:'400px'
+        opacity:0
+      },showAddUrlDur
+
+      @changeAddUrlState()
+    #切换，是否增加一个站点
+    showAddUrlClicked:->
+      if !@refs.$inputBox
+        @refs.$inputBox = $ @refs.inputBox.getDOMNode()
+
+      if !@state.isInputShow and !@state.isEditHeader
+        @inputBoxShow()
+      else
+        @inputBoxHide()
+
     render:->
       itemOne = @props.itemOne
+
       ce 'li',{ className:'web-list'},
-        (ce 'div',{ className:'list-type-header' },itemOne.header)
+        (ce 'div',{ className:'list-type-header' },
+
+          ce 'span',{ className:'header-name',onClick:@editTypeHeader },@state.headerName
+          ce 'div',{ className:'edit-header-box '+@state.editHeaderBoxClass },
+            ce 'input',{ className:'header-name-input',ref:'headerNameInput',defaultValue:@state.headerName,onChange:@headerNameChange}
+            ce 'div',{ className:'header-cancel',onClick:@editHeaderCancel },editHeaderCancelName
+            ce 'div',{ className:'header-submit',onClick:@editHeaderSubmit },editHeaderSubmitName
+
+          ce 'span',{ className:'show-addUrl-btn '+@state.btnRotateAniClass ,onClick:@showAddUrlClicked}
+          ce 'div',{ className:'newUrl-input-box',ref:'inputBox' },
+            ce 'div',{ className:'addUrl-btn' },addUrlBtnName
+            ce 'input',{ className:'url-name',type:'text',placeholder:addNameHolder }
+            ce 'input',{ className:'url-href',type:'url',placeholder:addUrlHolder }
+        )
         (ce 'ul',{ className:'list-contents' },itemOne.urls.map (urlOne,i)->
           (ce 'li',{ className:'list-contents-one',key:'url'+i},
             (ce 'a',{ href:urlOne.url,target:'_blank' },urlOne.name)
           )
         )
+
   }
 
   WebUl = React.createClass {
+    getInitialState:->
+      {
+        webListArr:webListArr
+      }
+    addType:->
+      curList = @state.webListArr
+      curList.push {
+        header:''
+        urls:[]
+      }
+      @setState
+        webListArr:curList
+
     render:->
-      ce 'ul',null,webListArr.map (itemOne,i,all)->
-        ce WebListOne,{itemOne:itemOne,key:'wl'+i}
+      ce 'ul',null,
+        (ce 'li',{ className:'add-type',onClick:@addType },addTypeName),
+        (@state.webListArr.map (itemOne,i,all)->
+          if itemOne.header
+            webListOne = ce WebListOne,{ itemOne:itemOne,isEditHeader:false,key:'wl'+i }
+          else
+            webListOne = ce WebListOne,{ itemOne:itemOne,isEditHeader:true,key:'wl'+i }
+          return webListOne
+        )
   }
 
   React.render(
     ce WebUl
-    document.getElementById('web-ul')
+    webUlDom
   )

@@ -1,0 +1,75 @@
+#搜索组件
+do ->
+  ce = React.createElement
+
+  searchTypeSelected = 'selected'
+
+  searchEngineObj = {
+    baidu:{
+      type:'baidu'
+      name:'百度'
+      className:'type-baidu selected'
+      urlPre:'http://www.baidu.com/s?wd='
+    }
+    google:{
+      type:'google'
+      name:'谷歌'
+      className:'type-google'
+      urlPre:'http://74.125.20.146/#newwindow=1&q='
+    }
+  }
+
+  defaultEngineType = 'baidu'
+
+  SearchBox =  React.createClass {
+    getInitialState:->
+      return {
+        searchType:defaultEngineType
+        text:'text'
+      }
+
+    changeEngine:(e)->
+      selectType = e.target.getAttribute 'type'
+
+      curType = @state.searchType
+      if curType is selectType
+        return e.stopPropagation()
+
+      searchEngineObj[curType].className = searchEngineObj[curType].className.replace ' '+searchTypeSelected,''
+      searchEngineObj[selectType].className +=  ' '+searchTypeSelected
+
+      @setState
+        searchType:selectType
+
+    clickSearchBtn:->
+      urlPre = searchEngineObj[@state.searchType].urlPre
+      url = urlPre + @state.text
+      window.open url
+
+    inputKeyDown:(e)->
+      inputDom = e.target
+      @setState
+        text:inputDom.value
+
+    render:->
+      ce 'div',{className:'search'},
+        (ce 'ul',{className:'search-type'},
+          (ce 'li',{onClick:@changeEngine,type:searchEngineObj.baidu.type,className:searchEngineObj.baidu.className},searchEngineObj.baidu.name)
+          (ce 'li',{onClick:@changeEngine,type:searchEngineObj.google.type,className:searchEngineObj.google.className},searchEngineObj.google.name)
+          (ce 'li',{className:'cf'})
+        )
+        (ce 'input',{
+          onKeyDown:@inputKeyDown
+          className :'search-input'
+          placeholder:'正在使用'+searchEngineObj[@state.searchType].name+'搜索'
+          type:'text'
+        })
+        (ce 'div',{ className:'search-btn',onClick:@clickSearchBtn },'Go')
+        (ce 'div',{ className:'cf '} )
+
+  }
+
+  React.render(
+    ce SearchBox
+    document.getElementById('searchBox')
+  )

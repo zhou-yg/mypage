@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="Public/css/common.css">
     <link rel="stylesheet" href="Public/css/index.css">
-    <script src="Public/js/hammer.js"></script>
     <script src="Public/js/react.js"></script>
-    <script src="Public/js/react-with-addons.js"></script>
     <script src="Public/js/jquery2x.js"></script>
     <title>zyg</title>
 </head>
@@ -37,30 +35,16 @@
             </div>
             -->
         </div>
-        <div id="web-ul">
-
-        </div>
-        <!--
         <div class="web-list">
             <div class="list-type-header">
-                <span class="header-name">社区</span>
-                <div class="edit-header-box">
-                    <input class="header-name-input" type="text" />
-                    <div class="header-cancel">取消</div>
-                    <div class="header-submit">确定</div>
-                </div>
-                <span class="show-addUrl-btn"></span>
-                <div class="newUrl-input-box">
-                    <div class="addUrl-btn" >添加</div>
-                    <input class="url-name" type="text" placeholder="名称"/>
-                    <input class="url-href" type="url" placeholder="链接"/>
-                </div>
+                社区
             </div>
             <ul class="list-contents">
                 <li class="list-contents-one"><a href="http://www.zhihu.com/" target="_blank">知乎</a></li>
                 <li class="list-contents-one"><a href="http://www.acfun.tv/v/list63/index.htm"  target="_blank">AC文章</a></li>
                 <li class="list-contents-one"><a href="http://tieba.baidu.com/"  target="_blank">贴吧</a></li>
                 <li class="list-contents-one"><a href="http://weibo.com/"  target="_blank">新浪微博</a></li>
+                <li class="cf"></li>
             </ul>
         </div>
         <div class="web-list">
@@ -87,7 +71,6 @@
                 <li class="cf"></li>
             </ul>
         </div>
-        -->
     </div>
 </body>
 <script src="Public/js/index.js"></script>
