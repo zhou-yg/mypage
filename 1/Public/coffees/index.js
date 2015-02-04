@@ -26,7 +26,7 @@
       getInitialState: function() {
         return {
           searchType: defaultEngineType,
-          text: 'text'
+          text: ''
         };
       },
       changeEngine: function(e) {
@@ -45,8 +45,10 @@
       clickSearchBtn: function() {
         var url, urlPre;
         urlPre = searchEngineObj[this.state.searchType].urlPre;
-        url = urlPre + this.state.text;
-        return window.open(url);
+        if (this.state.text) {
+          url = urlPre + this.state.text;
+          return window.open(url);
+        }
       },
       inputKeyDown: function(e) {
         var inputDom;
@@ -91,7 +93,7 @@
   })();
 
   (function() {
-    var WebListOne, WebUl, webListArr;
+    var WebListOne, WebUl, addNameHolder, addUrlBtnName, addUrlHolder, btnRotateAni, showAddUrlDur, webListArr;
     webListArr = [
       {
         header: '社区',
@@ -146,7 +148,47 @@
         ]
       }
     ];
+    addUrlBtnName = '添加';
+    addNameHolder = '名称';
+    addUrlHolder = '链接';
+    showAddUrlDur = 1000;
+    btnRotateAni = ' show-addUrl-btn-display';
     WebListOne = React.createClass({
+      getInitialState: function() {
+        return {
+          isInputShow: false,
+          btnRotateAniClass: ''
+        };
+      },
+      changeState: function() {
+        var btnRotateAniClassV;
+        if (this.state.isInputShow) {
+          btnRotateAniClassV = '';
+        } else {
+          btnRotateAniClassV = btnRotateAni;
+        }
+        return this.setState({
+          isInputShow: !this.state.isInputShow,
+          btnRotateAniClass: btnRotateAniClassV
+        });
+      },
+      showAddUrlClicked: function(evt) {
+        var $inputBox, that;
+        that = this;
+        $inputBox = $(this.refs.inputBox.getDOMNode());
+        if (!this.state.isInputShow) {
+          $inputBox.animate({
+            left: '-15px',
+            opacity: 1
+          }, showAddUrlDur);
+        } else {
+          $inputBox.animate({
+            left: '400px',
+            opacity: 0
+          }, showAddUrlDur);
+        }
+        return this.changeState();
+      },
       render: function() {
         var itemOne;
         itemOne = this.props.itemOne;
@@ -154,7 +196,25 @@
           className: 'web-list'
         }, ce('div', {
           className: 'list-type-header'
-        }, itemOne.header), ce('ul', {
+        }, ce('span', {
+          className: 'header-name'
+        }, itemOne.header), ce('span', {
+          className: 'show-addUrl-btn' + this.state.btnRotateAniClass,
+          onClick: this.showAddUrlClicked
+        }), ce('div', {
+          className: 'newUrl-input-box',
+          ref: 'inputBox'
+        }, ce('div', {
+          className: 'addUrl-btn'
+        }, addUrlBtnName), ce('input', {
+          className: 'url-name',
+          type: 'text',
+          placeholder: addNameHolder
+        }), ce('input', {
+          className: 'url-href',
+          type: 'url',
+          placeholder: addUrlHolder
+        }))), ce('ul', {
           className: 'list-contents'
         }, itemOne.urls.map(function(urlOne, i) {
           return ce('li', {

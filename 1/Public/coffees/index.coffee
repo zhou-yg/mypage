@@ -25,7 +25,7 @@ do ->
     getInitialState:->
       return {
         searchType:defaultEngineType
-        text:'text'
+        text:''
       }
 
     changeEngine:(e)->
@@ -43,8 +43,9 @@ do ->
 
     clickSearchBtn:->
       urlPre = searchEngineObj[@state.searchType].urlPre
-      url = urlPre + @state.text
-      window.open url
+      if @state.text
+        url = urlPre + @state.text
+        window.open url
 
     inputKeyDown:(e)->
       console.log @refs.searchText
@@ -125,11 +126,62 @@ do ->
     }]
   }]
 
+
+  addUrlBtnName = '添加'
+  addNameHolder = '名称'
+  addUrlHolder = '链接'
+
+  showAddUrlDur = 1000
+  btnRotateAni = ' show-addUrl-btn-display'
+
   WebListOne = React.createClass {
+    getInitialState:->
+      {
+        isInputShow:false
+        btnRotateAniClass:''
+      }
+    changeState:->
+      if @state.isInputShow
+        btnRotateAniClassV = ''
+      else
+        btnRotateAniClassV = btnRotateAni
+
+      @setState {
+        isInputShow:!@state.isInputShow
+        btnRotateAniClass:btnRotateAniClassV
+      }
+
+    showAddUrlClicked:(evt)->
+      that = this
+      $inputBox = $ @refs.inputBox.getDOMNode()
+
+      if !@state.isInputShow
+        #show
+        $inputBox.animate {
+          left:'-15px'
+          opacity:1
+        },showAddUrlDur
+
+      else
+        #hide
+        $inputBox.animate {
+          left:'400px'
+          opacity:0
+        },showAddUrlDur
+
+      @changeState()
+
     render:->
       itemOne = @props.itemOne
       ce 'li',{ className:'web-list'},
-        (ce 'div',{ className:'list-type-header' },itemOne.header)
+        (ce 'div',{ className:'list-type-header' },
+          ce 'span',{ className:'header-name' },itemOne.header
+          ce 'span',{ className:'show-addUrl-btn'+@state.btnRotateAniClass ,onClick:@showAddUrlClicked}
+          ce 'div',{ className:'newUrl-input-box',ref:'inputBox' },
+            ce 'div',{ className:'addUrl-btn' },addUrlBtnName
+            ce 'input',{ className:'url-name',type:'text',placeholder:addNameHolder }
+            ce 'input',{ className:'url-href',type:'url',placeholder:addUrlHolder }
+        )
         (ce 'ul',{ className:'list-contents' },itemOne.urls.map (urlOne,i)->
           (ce 'li',{ className:'list-contents-one',key:'url'+i},
             (ce 'a',{ href:urlOne.url,target:'_blank' },urlOne.name)

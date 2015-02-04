@@ -1,0 +1,40 @@
+do ->
+  $searchType = $ '.search-type'
+  $searchBtn = $ '.search-btn'
+  $searchInput = $ '.search-input'
+
+  searchTypeDefault = 'baidu'
+  searchTypeMap =
+    baidu:
+      desc:'正在使用百度搜索'
+      queryTo:(_searchText)->
+        return 'http://www.baidu.com/s?wd='+_searchText
+    google:
+      desc:'正在使用谷歌搜索'
+      queryTo:(_searchText)->
+        return 'http://74.125.20.146/#newwindow=1&q='+_searchText
+
+  buildSearchUrl = searchTypeMap[searchTypeDefault].queryTo
+
+  $searchType
+    .children()
+    .click (e)->
+      $this=  $ this
+      type = $this.attr 'searchType'
+      typeObj = searchTypeMap[type] || searchTypeMap[searchTypeDefault]
+
+      buildSearchUrl = typeObj.queryTo
+
+      $this.addClass 'selected'
+            .siblings 'li'
+              .removeClass 'selected'
+
+      $searchInput.attr 'placeholder',typeObj.desc
+
+  $searchBtn
+    .click ->
+      text = $searchInput.val()
+
+      if text
+        url = buildSearchUrl text
+        location.href = url

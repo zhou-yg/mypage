@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="Public/css/common.css">
+    <link rel="stylesheet" href="Public/css/index.css">
+    <script src="Public/js/jquery2x.js"></script>
+    <title>zyg</title>
+</head>
+<body>
+    <header>
+
+    </header>
+    <div class="main">
+        <div class="search">
+            <ul class="search-type">
+                <li class="type-baidu selected" searchType="baidu">百度</li>
+                <li class="type-google" searchType="google">谷歌</li>
+                <li class="cf"></li>
+            </ul>
+            <input class="search-input" type="text"/>
+            <div class="search-btn">Go</div>
+            <div class="cf"></div>
+        </div>
+    </div>
+</body>
+<script src="Public/js/index.js"></script>
+
+</html>
