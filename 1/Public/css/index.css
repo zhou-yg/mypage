@@ -87,22 +87,97 @@ header .favorite-dir .dir-list .favorite-icon{
     background-color: #D0D0D0;
     color: #ffffff;
 }
+/*--------------------------------------------------------------*/
+.main .add-type{
+    background-image: url(../images/plus-on.png);
+    background-size: 15px 15px;
+    background-repeat: no-repeat;
+    background-position: 2px 18px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding-top: 15px;
+    opacity: 0.7;
+    width: 100%;
+    text-indent: 20px;
+    color: #474747;
+    max-width: 800px;
+    overflow: hidde
+}
+.main .add-type:hover{
+    color: #BCCEFC;
+    cursor: pointer;
+}
 .main .web-list{
     margin:0 auto;
+    padding-top: 15px;
     width: 100%;
     max-width: 800px;
     overflow: hidden;
+
 }
 .main .web-list .list-type-header{
-    margin-top: 15px;
     background-color: #BCCEFC;
     height: 40px;
     line-height: 40px;
     text-indent: 12px;
     color: #565656;
+    position: relative;
+}
+.main .web-list .list-type-header .edit-header-box{
+    text-indent: 0;
+    float: left;
+
+    position: absolute;
+    top: 7.5px;
+    left: 8px;
+}
+.main .web-list .list-type-header .edit-header-box .header-name-input{
+    box-sizing: border-box;
+    margin-right: 10px;
+    padding-left: 4px;
+    width: 135px;
+    height: 25px;
+    line-height: 25px;
+    border:1px #B2B2B2 solid;
+    outline: none;
+    float: left;
+}
+.main .web-list .list-type-header .edit-header-box .header-cancel{
+    background-color: #ffffff;
+    margin-right: 5px;
+    width: 55px;
+    height: 25px;
+    font-size: 13px;
+    color: #474747;
+    line-height: 25px;
+    text-align: center;
+    text-indent: 0;
+
+    position: relative;
+
+    cursor: pointer;
+    float: left;
+}
+.main .web-list .list-type-header .edit-header-box .header-submit{
+
+    background-color: #ffffff;
+    margin-right: 5px;
+    width: 55px;
+    height: 25px;
+    color: #474747;
+    font-size: 13px;
+    line-height: 25px;
+    text-align: center;
+    text-indent: 0;
+
+    position: relative;
+
+    cursor: pointer;
+    float: left;
 }
 
 .main .web-list .list-type-header .header-name{
+    cursor: pointer;
 }
 .main .web-list .list-type-header .show-addUrl-btn{
     background-image: url(../images/plus.png);
@@ -177,6 +252,7 @@ header .favorite-dir .dir-list .favorite-icon{
     width: 85px;
     height: 25px;
     color: #474747;
+    font-size: 13px;
     line-height: 25px;
     text-align: center;
     text-indent: 0;
