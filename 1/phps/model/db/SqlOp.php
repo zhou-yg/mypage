@@ -1,15 +1,4 @@
 <?php
-function delete_slash($string){
-	$str = "";
-	for ($i=0; $i < strlen($string); $i++) {
-		if($string[$i] == "\\"){
-		}else{
-			$str = $str.$string[$i];
-		}
-	}
-	return $str;
-}
-
 class SqlOp{
 	
 	private $adress;
@@ -18,7 +7,7 @@ class SqlOp{
 	private $password;
 	
 	private $db;
-	private $db_name = 'perSonalWebInfo';
+	private $db_name = 'mypage';
 
 	public $connect;
 	public $result;
