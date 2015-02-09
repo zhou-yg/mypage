@@ -3,26 +3,30 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!-- style -->
     <link rel="stylesheet" href="Public/css/common.css">
+    <link rel="stylesheet" href="Public/css/header.css">
     <link rel="stylesheet" href="Public/css/index.css">
+    <link rel="stylesheet" href="Public/css/highlight.css">
+    <!-- script lib -->
     <script src="Public/js/jquery2x.js"></script>
     <script src="Public/js/underscore-min.js"></script>
     <script src="Public/js/backbone-min.js"></script>
     <script src="Public/js/react.js"></script>
     <script src="Public/js/react-with-addons.js"></script>
+    <script src="Public/js/markdown.js"></script>
+    <script src="Public/js/highlight.pack.js"></script>
     <title>zyg</title>
 </head>
 <body>
+    <!-- 头部栏 -->
     <header>
-        <!-- 收藏夹 -->
-        <div class="favorite-dir">
-            <ul class="dir-list">
-                <li class="favorite-icon"></li>
-                <li class="cf"></li>
-            </ul>
-        </div>
-        <div class="cf"></div>
     </header>
+    <!-- 大图logo -->
+    <div class="logo-box">
+        <img class="header-logo" src="" />
+    </div>
+    <!-- 搜索和导航 -->
     <div class="main">
         <div id="searchBox" class="search">
             <!--
@@ -63,31 +67,12 @@
                 <li class="list-contents-one"><a href="http://weibo.com/"  target="_blank">新浪微博</a></li>
             </ul>
         </div>
-        <div class="web-list">
-            <div class="list-type-header">
-                直播
-            </div>
-            <ul class="list-contents">
-                <li class="list-contents-one"><a href="http://www.douyutv.com/" target="_blank">斗鱼</a></li>
-                <li class="list-contents-one"><a href="http://zhanqi.tv/"  target="_blank">战棋</a></li>
-                <li class="list-contents-one"><a href="http://www.huomaotv.com/"  target="_blank">火猫</a></li>
-                <li class="list-contents-one"><a href="http://www.kktv5.com/"  target="_blank">KK游戏</a></li>
-                <li class="cf"></li>
-            </ul>
-        </div>
-        <div class="web-list">
-            <div class="list-type-header">
-                视频
-            </div>
-            <ul class="list-contents">
-                <li class="list-contents-one"><a href="http://www.acfun.tv/" target="_blank">AcFun</a></li>
-                <li class="list-contents-one"><a href="http://www.bilibili.com/"  target="_blank">B站</a></li>
-                <li class="list-contents-one"><a href="http://www.youku.com/i/"  target="_blank">优酷</a></li>
-                <li class="list-contents-one"><a href="http://www.tudou.com/"  target="_blank">土豆</a></li>
-                <li class="cf"></li>
-            </ul>
-        </div>
         -->
+    </div>
+    <!-- blog -->
+    <div class="blog">
+        <textarea name="d" id="blog-md-text" cols="30" rows="10"></textarea>
+        <div id="blog-html-text" class="blog-html-text"></div>
     </div>
 </body>
 <script src="Public/js/index.js"></script>

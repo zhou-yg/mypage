@@ -1,31 +1,10 @@
-header{
-    background-color: #f0f0f0;
-    margin: 0 auto;
-    width: 100%;
-    height: 195px;
-    display: block;
-}
-header .favorite-dir{
-    background-color: #BCCEFC;
-    height: 40px;
-    float: right;
-}
-header .favorite-dir .dir-list{
-    background-color: #BCCEFC;
-    height: 40px;
-    float: right;
-}
-header .favorite-dir .dir-list .favorite-icon{
-    width: 40px;
-    padding-top: 40px;
-}
 .main{
     width: 100%;
 }
 .main .search{
     margin:0 auto;
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
 }
 .main .search .search-type{
     overflow: hidden;
@@ -100,8 +79,7 @@ header .favorite-dir .dir-list .favorite-icon{
     width: 100%;
     text-indent: 20px;
     color: #474747;
-    max-width: 800px;
-    overflow: hidde
+    overflow: hidden;
 }
 .main .add-type:hover{
     color: #BCCEFC;
@@ -111,7 +89,6 @@ header .favorite-dir .dir-list .favorite-icon{
     margin:0 auto;
     padding-top: 15px;
     width: 100%;
-    max-width: 800px;
     overflow: hidden;
 
 }
@@ -206,33 +183,41 @@ header .favorite-dir .dir-list .favorite-icon{
 @keyframes btnRotate {
     from{
         transform: rotate(0deg);
+        -webkit-transform:  rotate(0deg);
     }
     to{
         transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
     }
 }
 @-moz-keyframes btnRotate{
     from{
         transform: rotate(0deg);
+        -webkit-transform:  rotate(0deg);
     }
     to{
         transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
     }
 }
 @-webkit-keyframes btnRotate {
     from{
         transform: rotate(0deg);
+        -webkit-transform:  rotate(0deg);
     }
     to{
         transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
     }
 }
 @-ms-keyframes btnRotate {
     from{
         transform: rotate(0deg);
+        -webkit-transform:  rotate(0deg);
     }
     to{
         transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
     }
 }
 .main .web-list .list-type-header .newUrl-input-box{

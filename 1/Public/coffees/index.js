@@ -6,8 +6,6 @@
 
   cc = React.createClass;
 
-  (function() {})();
-
 
   /*
   "[{"header":"社区","urls":[{"url":"http://www.zhihu.com/","name":"知乎"},{"url":"http://www.acfun.tv/v/list63/index.htm","name":"AC文章"},{"url":"http://tieba.baidu.com/","name":"贴吧"},{"url":"http://weibo.com/","name":"新浪微博"}]},{"header":"直播","urls":[{"url":"http://www.douyutv.com/","name":"斗鱼"},{"url":"http://zhanqi.tv/","name":"战棋"},{"url":"http://www.huomaotv.com/","name":"火猫"},{"url":"http://www.kktv5.com/","name":"KK游戏"}]},{"header":"视频","urls":[{"url":"http://www.acfun.tv/","name":"AcFun"},{"url":"http://www.bilibili.com/","name":"B站"},{"url":"http://www.youku.com/i/","name":"优酷"},{"url":"http://www.tudou.com/","name":"土豆"}]}]"
@@ -62,18 +60,19 @@
       }
     });
     urlsModel = new UrlsModel;
-    urlsModel.fetch({
-      url: 'phps/index.php?fn=1100&param={"type":"get"}',
-      success: function(model, res) {
-        if (typeof res === 'string') {
-          res = JSON.parse(res);
-        }
-        return model.set('urlsArr', res);
-      },
-      error: function() {
-        return console.log.apply(console, arguments);
-      }
-    });
+
+    /*
+     *获取服务端的数据
+    urlsModel.fetch {
+      url:'phps/index.php?fn=1100&param={"type":"get"}'
+      success:(model,res)->
+        if typeof res is 'string'
+          res = JSON.parse res
+        model.set 'urlsArr',res
+      error:->
+        console.log.apply console,arguments
+    }
+     */
     (function() {
       var SearchBox, defaultEngineType, searchEngineObj, searchTypeSelected;
       searchTypeSelected = 'selected';

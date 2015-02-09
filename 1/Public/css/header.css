@@ -1,0 +1,30 @@
+body{
+    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+}
+header{
+    background-color: #111111;
+    margin: 0 auto;
+    width: 100%;
+    height: 85px;
+    display: block;
+}
+header .favorite-dir{
+    background-color: #BCCEFC;
+    height: 40px;
+    float: right;
+}
+header .favorite-dir .dir-list{
+    background-color: #BCCEFC;
+    height: 40px;
+    float: right;
+}
+header .favorite-dir .dir-list .favorite-icon{
+    width: 40px;
+    padding-top: 40px;
+}
+.logo-box{
+}
+.logo-box .header-logo{
+}
