@@ -1,68 +1,33 @@
 (function() {
-  var ce;
+  var cc, ce;
 
   ce = React.createElement;
+
+  cc = React.createClass;
+
+  (function() {})();
+
+
+  /*
+  "[{"header":"社区","urls":[{"url":"http://www.zhihu.com/","name":"知乎"},{"url":"http://www.acfun.tv/v/list63/index.htm","name":"AC文章"},{"url":"http://tieba.baidu.com/","name":"贴吧"},{"url":"http://weibo.com/","name":"新浪微博"}]},{"header":"直播","urls":[{"url":"http://www.douyutv.com/","name":"斗鱼"},{"url":"http://zhanqi.tv/","name":"战棋"},{"url":"http://www.huomaotv.com/","name":"火猫"},{"url":"http://www.kktv5.com/","name":"KK游戏"}]},{"header":"视频","urls":[{"url":"http://www.acfun.tv/","name":"AcFun"},{"url":"http://www.bilibili.com/","name":"B站"},{"url":"http://www.youku.com/i/","name":"优酷"},{"url":"http://www.tudou.com/","name":"土豆"}]}]"
+   */
 
   (function() {
     var UrlsModel, urlsModel;
     UrlsModel = Backbone.Model.extend({
       defaults: {
-        urlsArr: [
-          {
-            header: '社区',
-            urls: [
-              {
-                url: 'http://www.zhihu.com/',
-                name: '知乎'
-              }, {
-                url: 'http://www.acfun.tv/v/list63/index.htm',
-                name: 'AC文章'
-              }, {
-                url: 'http://tieba.baidu.com/',
-                name: '贴吧'
-              }, {
-                url: 'http://weibo.com/',
-                name: '新浪微博'
-              }
-            ]
-          }, {
-            header: '直播',
-            urls: [
-              {
-                url: 'http://www.douyutv.com/',
-                name: '斗鱼'
-              }, {
-                url: 'http://zhanqi.tv/',
-                name: '战棋'
-              }, {
-                url: 'http://www.huomaotv.com/',
-                name: '火猫'
-              }, {
-                url: 'http://www.kktv5.com/',
-                name: 'KK游戏'
-              }
-            ]
-          }, {
-            header: '视频',
-            urls: [
-              {
-                url: 'http://www.acfun.tv/',
-                name: 'AcFun'
-              }, {
-                url: 'http://www.bilibili.com/',
-                name: 'B站'
-              }, {
-                url: 'http://www.youku.com/i/',
-                name: '优酷'
-              }, {
-                url: 'http://www.tudou.com/',
-                name: '土豆'
-              }
-            ]
-          }
-        ]
+        urlsArr: null,
+        welUl: null,
+        webUlDom: document.getElementById('web-ul')
       },
-      initialize: function() {},
+      initialize: function() {
+        return this.bind('change:urlsArr', function() {
+          return this.render();
+        });
+      },
+      render: function() {
+        return React.render(ce(this.get('webUl')), this.get('webUlDom'));
+      },
       addType: function() {
         var curList;
         curList = this.get('urlsArr');
@@ -81,7 +46,6 @@
           if (typeOne === removeTypeObj) {
             curList.splice(i, 1);
             this.set('urlsArr', curList);
-            console.log(curList);
             break;
           } else {
             _results.push(void 0);
@@ -97,6 +61,18 @@
       }
     });
     urlsModel = new UrlsModel;
+    urlsModel.fetch({
+      url: 'phps/index.php?fn=1100&param={"type":"get"}',
+      success: function(model, res) {
+        if (typeof res === 'string') {
+          res = JSON.parse(res);
+        }
+        return model.set('urlsArr', res);
+      },
+      error: function() {
+        return console.log.apply(console, arguments);
+      }
+    });
     (function() {
       var SearchBox, defaultEngineType, searchEngineObj, searchTypeSelected;
       searchTypeSelected = 'selected';
@@ -115,7 +91,7 @@
         }
       };
       defaultEngineType = searchEngineObj.baidu.type;
-      SearchBox = React.createClass({
+      SearchBox = cc({
         getInitialState: function() {
           return {
             searchType: defaultEngineType,
@@ -184,8 +160,7 @@
       return React.render(ce(SearchBox), document.getElementById('searchBox'));
     })();
     return (function() {
-      var WebListOne, WebUl, addNameHolder, addTypeName, addUrlBtnName, addUrlHolder, btnRotateAni, defaultTypeName, editHeaderCancelName, editHeaderDeleteName, editHeaderSubmitName, showAddUrlDur, webUlDom;
-      webUlDom = document.getElementById('web-ul');
+      var WebUl, addNameHolder, addTypeName, addUrlBtnName, addUrlHolder, btnRotateAni, defaultTypeName, editHeaderCancelName, editHeaderDeleteName, editHeaderSubmitName, showAddUrlDur;
       defaultTypeName = '默认';
       addTypeName = '增加分类';
       addNameHolder = '名称';
@@ -196,7 +171,7 @@
       editHeaderSubmitName = '确定';
       showAddUrlDur = 750;
       btnRotateAni = ' show-addUrl-btn-display';
-      WebListOne = React.createClass({
+      window.WebListOne = cc({
         getInitialState: function() {
           var headerName;
           headerName = this.props.itemOne.header ? this.props.itemOne.header : defaultTypeName;
@@ -373,7 +348,7 @@
           })));
         }
       });
-      WebUl = React.createClass({
+      WebUl = cc({
         getInitialState: function() {
           return {
             urlListArr: urlsModel.get('urlsArr')
@@ -408,9 +383,7 @@
           }));
         }
       });
-      window.webUl = ce(WebUl);
-      window.wu = webUlDom;
-      return React.render(webUl, webUlDom);
+      return urlsModel.set('webUl', WebUl);
     })();
   })();
 
