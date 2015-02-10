@@ -23,6 +23,20 @@
           return this.render();
         });
       },
+      saveUrls: function() {
+        var urlsArr, urlsJson;
+        urlsArr = this.get('urlsArr');
+        urlsJson = JSON.stringify(urlsArr);
+        return $.post('phps/index.php', {
+          fn: 2002,
+          param: {
+            type: 'update',
+            urls: urlsJson
+          }
+        }, function(data, state) {
+          return console.log(data, state);
+        });
+      },
       render: function() {
         return React.render(ce(this.get('webUl')), this.get('webUlDom'));
       },
@@ -33,45 +47,43 @@
           header: '',
           urls: []
         });
-        return this.set('urlsArr', curList);
+        this.set('urlsArr', curList);
+        return this.saveUrls();
       },
       removeType: function(removeTypeObj) {
-        var curList, i, typeOne, _i, _len, _results;
+        var curList, i, typeOne, _i, _len;
         curList = this.get('urlsArr');
-        _results = [];
         for (i = _i = 0, _len = curList.length; _i < _len; i = ++_i) {
           typeOne = curList[i];
           if (typeOne === removeTypeObj) {
             curList.splice(i, 1);
             this.set('urlsArr', curList);
             break;
-          } else {
-            _results.push(void 0);
           }
         }
-        return _results;
+        return this.saveUrls();
       },
       addUrl: function(index, urlObj) {
         var curList;
         curList = this.get('urlsArr');
         curList[index].urls.push(urlObj);
-        return this.set(curList);
+        this.set(curList);
+        return this.saveUrls();
       }
     });
     urlsModel = new UrlsModel;
-
-    /*
-     *获取服务端的数据
-    urlsModel.fetch {
-      url:'phps/index.php?fn=1100&param={"type":"get"}'
-      success:(model,res)->
-        if typeof res is 'string'
-          res = JSON.parse res
-        model.set 'urlsArr',res
-      error:->
-        console.log.apply console,arguments
-    }
-     */
+    urlsModel.fetch({
+      url: 'phps/index.php?fn=2002&param={"type":"get"}',
+      success: function(model, res) {
+        if (typeof res === 'string') {
+          res = JSON.parse(res);
+        }
+        return model.set('urlsArr', res);
+      },
+      error: function() {
+        return console.log.apply(console, arguments);
+      }
+    });
     (function() {
       var SearchBox, defaultEngineType, searchEngineObj, searchTypeSelected;
       searchTypeSelected = 'selected';

@@ -8,6 +8,10 @@ class Route extends Model {
 	public $controller_parent = 'Controller';
 	public $set_param_fn = 'set_param';
 
+	/*
+	 * 构造函数
+	 * 取得必要的参数
+	 */
 	public function __construct() {
 		//controller编号
 		if(isset($_GET['fn']) && isset($_GET['param'])){
@@ -21,12 +25,28 @@ class Route extends Model {
 			$this->fn = intval($this->fn);
 			//随身参数
 			$this->param = $_POST['param'];
-			
 		}else{
 			exit('must have fn and param');
 		}
 	}
+	/*
+	 * 参数处理 
+	 * 
+	 * 统一至Array形式
+	 */
+	public function param_handle(){
+		$param = $this->param;		
+
+		if(is_string($param)){
+			$param = json_decode($param);
+			$param = get_object_vars($param);
+		}
+		
+		$this->param = $param;
+	}
 	public function init($fn_map) {
+		$this->param_handle();
+		
 		$this->load('tools/Tools.php');
 		
 		$controller = $fn_map[$this->fn];

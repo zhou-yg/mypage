@@ -17,6 +17,18 @@ do ->
       @bind 'change:urlsArr',->
         @render()
 
+    saveUrls:->
+      urlsArr = @get 'urlsArr'
+      urlsJson = JSON.stringify(urlsArr)
+
+      $.post 'phps/index.php',{
+        fn:2002
+        param:
+          type:'update'
+          urls:urlsJson
+      },(data,state)->
+        console.log data,state
+
     render:->
       React.render(
         ce @get 'webUl'
@@ -30,6 +42,7 @@ do ->
         urls:[]
       }
       @set 'urlsArr',curList
+      @saveUrls()
 
     removeType:(removeTypeObj)->
       curList = @get 'urlsArr'
@@ -39,25 +52,28 @@ do ->
           @set 'urlsArr',curList
           break;
 
+      @saveUrls()
+
     addUrl:(index,urlObj)->
       curList = @get 'urlsArr'
       curList[index].urls.push urlObj
       @set curList
+      @saveUrls()
   }
 
   urlsModel = new UrlsModel
-  ###
+
   #获取服务端的数据
   urlsModel.fetch {
-    url:'phps/index.php?fn=1100&param={"type":"get"}'
+    url:'phps/index.php?fn=2002&param={"type":"get"}'
     success:(model,res)->
       if typeof res is 'string'
         res = JSON.parse res
+
       model.set 'urlsArr',res
     error:->
       console.log.apply console,arguments
   }
-  ###
 
 
   #各种组件
