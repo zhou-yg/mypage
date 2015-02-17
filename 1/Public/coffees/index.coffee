@@ -324,7 +324,7 @@ do ->
         }
       addType:->
         urlsModel.addType()
-        @forceUpdate()
+        @forceUpdate()	
 
       render:->
         ce 'ul',null,
